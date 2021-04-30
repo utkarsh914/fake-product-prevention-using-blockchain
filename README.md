@@ -1,2 +1,1 @@
-# bare-box
-Truffle Box for a bare-minimum Truffle project (`truffle init`)
+A d-app powered by Ethereum to detect and prevent Fake product using Blockchain

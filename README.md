@@ -1,12 +1,10 @@
----
-<p align="center">A blockchain-based Product Ownership Management System to detect and prevent counterfeit products in the supply chain.</p>
-
----
+A blockchain-based Product Ownership Management System to detect and prevent counterfeit products in the supply chain.
 
 # Table of Contents
 + [About](#description)
 + [Getting Started](#getting_started)
 + [Deployment](#deployment)
++ [Technology Stack](#techstack)
 
 ## About <a name="description"></a>
 + In today’s world, how do you know if you are buying a genuine product?
@@ -55,7 +53,7 @@ $ truffle test
 ```
 
 
-## Built With <a name="built_with"></a>
+## Technology Stack <a name="techstack"></a>
 
 Blockchain:
 + [Ethereum](https://www.ethereum.org/) - Blockchain Network

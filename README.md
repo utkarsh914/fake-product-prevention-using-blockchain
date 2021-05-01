@@ -1,5 +1,7 @@
 A blockchain-based Product Ownership Management System to detect and prevent counterfeit products in the supply chain.
 
+### Note: This project is under development.
+
 # Table of Contents
 + [About](#description)
 + [Getting Started](#getting_started)

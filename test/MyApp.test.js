@@ -1,9 +1,13 @@
+const { assert } = require("chai")
+
 let MyApp = artifacts.require('./MyApp.sol')
 
 contract('MyApp', (accounts) => {
+	
 	before(async () => {
 		this.app = await MyApp.deployed()
 	})
+
 
 	it('deploys successfully', async () => {
 		let address = await this.app.address
@@ -13,39 +17,38 @@ contract('MyApp', (accounts) => {
 		assert.notEqual(address, undefined)
 	})
 
-	it('default product', async () => {
+
+	it('check if product #0 is created by default', async () => {
 		let p0 = await this.app.products(0);
-		console.log("Creating prod 0 ");
-		console.log(p0);
-
-		console.log("Creating prod 1 ");
-		let x = await this.app.createProduct("Prod 1", "Model 1");
-		let listx = {id: x.logs[0].args.id.toNumber(), prevOwners: x.logs[0].args.prevOwners}
-		console.log(listx);
-		// console.log(x);
-
-		console.log("Created prod 1 ");
-		let p1 = await this.app.products(1);
-
-		console.log("Querying owners list of prod 0, 1");
-		let o0 = await this.app.getOwners(0);
-		let o1 = await this.app.getOwners(1);
-		let list0 = {id: o0.logs[0].args.id.toNumber(), prevOwners: o0.logs[0].args.prevOwners}
-		let list1 = {id: o1.logs[0].args.id.toNumber(), prevOwners: o1.logs[0].args.prevOwners}
-		console.log(list0);
-		console.log(list1);
+		assert.equal(p0.id.toNumber(), 0);
+	})
 
 
-		let update = await this.app.updateOwnership(0, x.receipt.to);
-		// console.log(update);
-		console.log("Updated prod 0 details");
-		p0 = await this.app.products(0);
-		console.log(p0);
+	it('create a new product (#1)', async () => {
+		let p1 = await this.app.createProduct("Prod 1", "Model 1");
+		assert.equal(p1.logs[0].args.id.toNumber(), 1);
+		this.newAddress = p1.receipt.to
+	})
 
-		console.log("Querying owners list of prod 0");
-		o0 = await this.app.getOwners(0);
-		list0 = {id: o0.logs[0].args.id.toNumber(), prevOwners: o0.logs[0].args.prevOwners}
-		console.log(list0);
+
+	it('Transfer ownership of product #0 to other address', async () => {
+		let p0 = await this.app.products(0);
+		const oldAddress = p0.curOwner;
+		// apply update
+		await this.app.updateOwnership(0, this.newAddress);
+		p0 = await this.app.products(0); // fetch updated prod #0
+		let prevOwnersList = (await this.app.getOwners(0)).logs[0].args.prevOwners;
+		
+		assert.equal(p0.curOwner.toLowerCase(), this.newAddress.toLowerCase());
+		assert.equal(prevOwnersList[0].toLowerCase(), oldAddress.toLowerCase());
+	})
+
+
+	it('Check if prevOwners list updates correctly', async () => {
+		let prevOwnersList_0 = (await this.app.getOwners(0)).logs[0].args.prevOwners;
+		let prevOwnersList_1 = (await this.app.getOwners(1)).logs[0].args.prevOwners;
+		assert.equal(prevOwnersList_0.length, 1);
+		assert.equal(prevOwnersList_1.length, 0);
 	})
 
 })

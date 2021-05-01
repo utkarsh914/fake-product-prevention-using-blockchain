@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 contract MyApp {
 
-	uint n = 0;
+	uint count = 0;
 
 	struct Product {
 		bool exists;
@@ -24,18 +24,17 @@ contract MyApp {
 	}
 
 	function createProduct(string memory _name, string memory _model) public {
-		Product storage p = products[n];
+		Product storage p = products[count];
 
 		p.exists = true;
-		p.id = n;
+		p.id = count;
 		p.name = _name;
 		p.model = _model;
 		p.curOwner = msg.sender;
-		address[] storage prevs = prevOwners[n];
-		// prevs.push(msg.sender);
+		address[] storage prevs = prevOwners[count];
 
-		n++;
-		emit ProductCreated(n-1, prevs);
+		count++;
+		emit ProductCreated(count-1, prevs);
 	}
 
 	function getOwners(uint _id) public {

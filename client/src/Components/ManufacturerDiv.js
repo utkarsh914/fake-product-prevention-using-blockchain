@@ -24,7 +24,7 @@ class ManufacturerDiv extends Component {
 			<div id="content" className="mt-3">
 				<div className="card mb-4" >
 					<div className="card-body">
-            <h5 className="text-center">Add a product</h5>
+						<h5 className="text-center">Add a product</h5>
 						<form className="my-3" onSubmit={this.handleCreateProduct}>
 
 							<div className="form-group">

@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import getWeb3 from "./getWeb3";
-import "./App.css";
+import getWeb3 from "./Utils/getWeb3";
+import "./Stylesheets/App.css";
 import MyApp from "./contracts/MyApp.json";
 
 class App extends Component {
   
   state = { storageValue: 0, web3: null, account: null, contract: null };
-
-
 
   componentDidMount = async () => {
     try {
@@ -64,7 +62,7 @@ class App extends Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
-      <div className="App">
+      <div className="container pt-5">
         <h1>Good to Go!</h1>
         <p>Truffle Box is installed and ready.</p>
         <h2>Smart Contract Example</h2>

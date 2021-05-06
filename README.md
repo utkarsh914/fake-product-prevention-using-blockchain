@@ -14,7 +14,7 @@ A blockchain-based Product Ownership Management System to detect and prevent cou
 + We plan to implement a proof-of-concept system employing a blockchain-based decentralized application which gives a customer the entire history of a product ownership (eg - brand info, owner, etc).
 
 ### Data Flow
-![Data Flow](src/images/PROCESS-FLOW.jpg)
+![Data Flow](client/public/PROCESS-FLOW.jpg)
 
 ### Why blockchain? <a name="why_blockchain"></a>
 + Unlike a normal database, Blockchain has a non-destructive (immutable) way to track data changes over time. This means that data is not editable rather, whenever updates are made, a new block is added to the “block-chain”. This helps track historical data (authenticity and owner data) of a product.
@@ -66,8 +66,6 @@ Blockchain:
 Web App:
 + [Metamask](https://metamask.io/) - A crypto wallet & gateway to blockchain apps
 + [Web3.js](https://web3js.readthedocs.io/en/v1.3.4/) - collection of libraries that allow you to interact with a local or remote ethereum node using HTTP, IPC or WebSocket
-+ [Lite-server](https://nodejs.org/en/) - Light weight server to serve our web app
-+ HTML - Markup language for creating web pages
++ React - For designing user interface
 + CSS - Style Sheet Language
-+ JavaScript - Scripting Language for web pages
 + Bootstrap - Templating

@@ -2,55 +2,93 @@ pragma solidity ^0.5.0;
 
 contract MyApp {
 
-	uint count = 0;
+	address public owner;
+	// initialize IDs
+	uint manufacturerId = 0;
+	uint customerId = 0;
+	uint productId = 0;
+
+	// define all custom structs
+
+	struct Manufacturer {
+		bool exists;
+		string name;
+		address _address;
+	}
 
 	struct Product {
 		bool exists;
 		uint id;
 		string name;
 		string model;
+		address manufacturer;
 		address curOwner;
 	}
 
-	mapping(uint => Product) public products;
-	mapping(uint => address[]) public prevOwners;
+	// struct Customer {
+	// 	bool exists;
+	// 	string name;
+	// 	address _address;
+	// }
 
-	event ProductCreated(uint id, address[] prevOwners);
-	event PrevOwnersList(uint id, address[] prevOwners);
+
+	// mapping(address => Customer) public customers;
+	mapping(address => Manufacturer) public manufacturers;
+	mapping(uint => Product) public products;
+	mapping(uint => address[]) public owners;
+
+
+	// events to be emitted
+	event ManufacturerCreated(string name, address _address);
+	event ProductCreated(uint id, address manufacturer);
 	event OwnershipUpdated(uint id, address newOwner);
 
+
+	// constructor function
 	constructor() public {
-		createProduct("Demo product", "some model");
+		owner = msg.sender;
 	}
+
+
+	function createManufacturer(string memory _name, address _address) public {
+		Manufacturer storage m = manufacturers[_address];
+		m.exists = true;
+		m.name = _name;
+		m._address = _address;
+		emit ManufacturerCreated(_name, _address);
+	}
+
 
 	function createProduct(string memory _name, string memory _model) public {
-		Product storage p = products[count];
+		require(manufacturers[msg.sender].exists == true, "You are not a Manufacturer!");
 
+		Product storage p = products[productId];
 		p.exists = true;
-		p.id = count;
+		p.id = productId;
 		p.name = _name;
 		p.model = _model;
+		p.manufacturer = msg.sender;
 		p.curOwner = msg.sender;
-		address[] storage prevs = prevOwners[count];
 
-		count++;
-		emit ProductCreated(count-1, prevs);
+		// push cur owner(manufacturer) to owners array
+		owners[productId].push(msg.sender);
+
+		productId++;
+		emit ProductCreated(productId-1, msg.sender);
 	}
 
-	function getOwners(uint _id) public {
-		emit PrevOwnersList(_id, prevOwners[_id]);
+
+	function getOwners(uint _id) public view returns(address[] memory) {
+		return owners[_id];
 	}
 
-	function isProductValid(uint _id) public view returns(bool) {
-		return products[_id].exists;
-	}
 
 	function updateOwnership(uint _id, address _newOwner) public {
 		Product storage p = products[_id];
 		require(p.curOwner == msg.sender, "Not authorized");
-		address[] storage prevs = prevOwners[_id];
-		prevs.push(p.curOwner);
+		
 		p.curOwner = _newOwner;
+		owners[_id].push(_newOwner);
 
 		emit OwnershipUpdated(_id, _newOwner);
 	}

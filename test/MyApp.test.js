@@ -1,54 +1,87 @@
-const { assert } = require("chai")
-
+const { assert } = require('chai');
 let MyApp = artifacts.require('./MyApp.sol')
+require('chai')
+	.use(require('chai-as-promised'))
+	.should();
+
 
 contract('MyApp', (accounts) => {
+
+	let app
+	const [owner, manufacturer, customer, customer2] = accounts
 	
 	before(async () => {
-		this.app = await MyApp.deployed()
+		app = await MyApp.deployed()
 	})
 
 
 	it('deploys successfully', async () => {
-		let address = await this.app.address
+		let address = await app.address
+		// verigy contract address
 		assert.notEqual(address, 0x0)
 		assert.notEqual(address, '')
 		assert.notEqual(address, null)
 		assert.notEqual(address, undefined)
+
+		// verify owner address is same
+		let ownerAddress = await app.owner()
+		assert.equal(ownerAddress.toLowerCase(), owner.toLowerCase())
 	})
 
 
-	it('check if product #0 is created by default', async () => {
-		let p0 = await this.app.products(0);
-		assert.equal(p0.id.toNumber(), 0);
+	it('Owner creates a new manufacturer', async () => {
+		// create a manufacturer
+		let result = await app.createManufacturer("Manufacturer #0", manufacturer, {from: owner})
+		// fetch it again to check if created successfully
+		result = await app.manufacturers(manufacturer)
+		assert.equal(result.exists, true);
+		assert.equal(result.name, "Manufacturer #0");
+		assert.equal(result._address.toLowerCase(), manufacturer.toLowerCase());
 	})
 
 
-	it('create a new product (#1)', async () => {
-		let p1 = await this.app.createProduct("Prod 1", "Model 1");
-		assert.equal(p1.logs[0].args.id.toNumber(), 1);
-		this.newAddress = p1.receipt.to
+
+	it('Manufacturer creates a new product (#0)', async () => {
+		// create a product
+		await app.createProduct("Prod #0", "Model #0", {from: manufacturer});
+
+		// fetch the products, and its owners
+		let p = await app.products(0)
+		let owners = await app.getOwners(0)
+
+		// verify if the fetched product is same as the created one
+		assert.equal(p.exists, true);
+		assert.equal(p.name, "Prod #0");
+		assert.equal(p.model, "Model #0");
+		assert.equal(p.manufacturer.toLowerCase(), manufacturer.toLowerCase());
+		assert.equal(p.curOwner.toLowerCase(), manufacturer.toLowerCase());
+		// verify product owners
+		assert.equal(owners[0].toLowerCase(), manufacturer.toLowerCase());
 	})
 
 
-	it('Transfer ownership of product #0 to other address', async () => {
-		let p0 = await this.app.products(0);
-		const oldAddress = p0.curOwner;
+	it('Manufacturer sells Product #0 to customer', async () => {
 		// apply update
-		await this.app.updateOwnership(0, this.newAddress);
-		p0 = await this.app.products(0); // fetch updated prod #0
-		let prevOwnersList = (await this.app.getOwners(0)).logs[0].args.prevOwners;
+		await app.updateOwnership(0, customer, { from: manufacturer });
+		const p0 = await app.products(0); // fetch updated prod #0
+		const owners = await app.getOwners(0) // fetch updated owners list of prod #0
 		
-		assert.equal(p0.curOwner.toLowerCase(), this.newAddress.toLowerCase());
-		assert.equal(prevOwnersList[0].toLowerCase(), oldAddress.toLowerCase());
+		assert.equal(p0.curOwner.toLowerCase(), customer.toLowerCase());
+		assert.equal(owners[0].toLowerCase(), manufacturer.toLowerCase());
+		assert.equal(owners[1].toLowerCase(), customer.toLowerCase());
 	})
 
 
-	it('Check if prevOwners list updates correctly', async () => {
-		let prevOwnersList_0 = (await this.app.getOwners(0)).logs[0].args.prevOwners;
-		let prevOwnersList_1 = (await this.app.getOwners(1)).logs[0].args.prevOwners;
-		assert.equal(prevOwnersList_0.length, 1);
-		assert.equal(prevOwnersList_1.length, 0);
+	it('Customer #0 sells Product #0 to customer #1', async () => {
+		// apply update
+		await app.updateOwnership(0, customer2, { from: customer });
+		const p0 = await app.products(0); // fetch updated prod #0
+		const owners = await app.getOwners(0) // fetch updated owners list of prod #0
+		
+		assert.equal(p0.curOwner.toLowerCase(), customer2.toLowerCase());
+		assert.equal(owners[0].toLowerCase(), manufacturer.toLowerCase());
+		assert.equal(owners[1].toLowerCase(), customer.toLowerCase());
+		assert.equal(owners[2].toLowerCase(), customer2.toLowerCase());
 	})
 
 })

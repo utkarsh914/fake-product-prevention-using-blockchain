@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
-class ManufacturerDiv extends Component {
+class OwnerDiv extends Component {
 
 	constructor(props) {
 		super(props)
-		this.state = { name: "", model: "" }
+		this.state = { name: "", address: "" }
 	}
 
 	handleChange = (e) => {
@@ -12,10 +12,10 @@ class ManufacturerDiv extends Component {
 		this.setState({ [name]: value })
 	}
 
-	handleCreateProduct = async (e) => {
+	handleCreateManufacturer = async (e) => {
 		e.preventDefault()
-		let { name, model } = this.state
-		await this.props.createProduct(name, model)
+		let { name, address } = this.state
+		await this.props.createManufacturer(name, address)
 	}
 	
 
@@ -24,9 +24,9 @@ class ManufacturerDiv extends Component {
 			<div id="content" className="mt-3">
 				<div className="card mb-4" >
 					<div className="card-body">
-            <h5 className="text-center">Add a product</h5>
-						<form className="my-3" onSubmit={this.handleCreateProduct}>
-
+						<h5 className="text-center">Add a manufacturer</h5>
+						<form className="my-3" onSubmit={this.handleCreateManufacturer}>
+							
 							<div className="form-group">
 								<input type="text" className="form-control" placeholder="Enter name"
 									name="name"
@@ -35,9 +35,9 @@ class ManufacturerDiv extends Component {
 							</div>
 
 							<div className="form-group">
-								<input type="text" className="form-control" placeholder="Enter model"
-									name="model"
-									value={this.state.model} onChange={this.handleChange}
+								<input type="text" className="form-control" placeholder="Enter address"
+									name="address"
+									value={this.state.address} onChange={this.handleChange}
 								/>
 							</div>
 
@@ -50,4 +50,4 @@ class ManufacturerDiv extends Component {
 	}
 }
 
-export default ManufacturerDiv;
+export default OwnerDiv;

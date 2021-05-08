@@ -14,9 +14,10 @@ class ManufacturerDiv extends Component {
 
 	handleCreateProduct = async (e) => {
 		e.preventDefault()
+		const { account, contract } = this.props
+		const { name, model } = this.state
 		try {
-			let { name, model } = this.state
-			await this.props.createProduct(name, model)
+			await contract.methods.createProduct(name, model).send({ from: account })
 			window.alert(`Created a product\n${name}\n${model}`)
 		}
 		catch (e) {

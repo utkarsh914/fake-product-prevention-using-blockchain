@@ -16,9 +16,10 @@ class SellProductDiv extends Component {
 
 	handleSubmit = async (e) => {
 		e.preventDefault()
+		const { account, contract } = this.props
 		const { productId, customer } = this.state
 		try {
-			await this.props.sellProduct(productId, customer)
+			await contract.methods.updateOwnership(productId, customer).send({ from: account })
 			window.alert(`Product sold to\n${customer}`)
 		}
 		catch (e) {

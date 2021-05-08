@@ -14,9 +14,17 @@ class ProductOwnerList extends Component {
 
 	handleSubmit = async (e) => {
 		e.preventDefault()
-		const owners = await this.props.searchProduct(this.state.productId)
-		console.log(owners)
-		this.setState({ owners })
+		const { account, contract } = this.props
+		const { productId } = this.state
+		try {
+			const owners = await contract.methods.getOwners(productId).call({ from: account })
+			console.log(owners)
+			this.setState({ owners })
+		}
+		catch (e) {
+			console.log(e)
+			window.alert("Error occured!")
+		}
 	}
 
 	renderOwnerList = () => {

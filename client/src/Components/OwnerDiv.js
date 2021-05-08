@@ -14,9 +14,10 @@ class OwnerDiv extends Component {
 
 	handleCreateManufacturer = async (e) => {
 		e.preventDefault()
-		let { name, address } = this.state
+		const { account, contract } = this.props
+		const { name, address } = this.state
 		try {
-			await this.props.createManufacturer(name, address)
+			await contract.methods.createManufacturer(name, address).send({ from: account })
 			window.alert(`Created a manufacturer\n${name}\n${address}`)
 		}
 		catch (e) {

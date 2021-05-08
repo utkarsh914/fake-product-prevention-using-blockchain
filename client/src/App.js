@@ -42,42 +42,23 @@ class App extends Component {
 
 
 	createManufacturer = async (name, address) => {
-		try {
-			const { account, contract } = this.state
-			const result = await contract.methods
-				.createManufacturer(name, address)
-				.send({ from: account })
-			
-			window.alert(`Created a manufacturer\n${name}\n${address}`)
-			console.log(result)
-		}
-		catch (e) {
-			window.alert("error occured")
-			console.log(e)
-		}
+		const { account, contract } = this.state
+		return contract.methods.createManufacturer(name, address)
+			.send({ from: account })
 	}
 
 
 	createProduct = async (name, model) => {
-		try {
-			const { account, contract } = this.state
-			const result = await contract.methods
-				.createProduct(name, model)
-				.send({ from: account })
-			
-			window.alert(`Created a product\n${name}\n${model}`)
-			console.log(result)
-		}
-		catch (e) {
-			window.alert("error occured")
-			console.log(e)
-		}
+		const { account, contract } = this.state
+		return contract.methods.createProduct(name, model)
+			.send({ from: account })
 	}
 
 
 	searchProduct = async (productId) => {
 		const { account, contract } = this.state
-		return contract.methods.getOwners(productId).call({ from: account })
+		return contract.methods.getOwners(productId)
+			.call({ from: account })
 	}
 
 

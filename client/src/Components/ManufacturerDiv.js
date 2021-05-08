@@ -14,8 +14,15 @@ class ManufacturerDiv extends Component {
 
 	handleCreateProduct = async (e) => {
 		e.preventDefault()
-		let { name, model } = this.state
-		await this.props.createProduct(name, model)
+		try {
+			let { name, model } = this.state
+			await this.props.createProduct(name, model)
+			window.alert(`Created a product\n${name}\n${model}`)
+		}
+		catch (e) {
+			window.alert("error occured")
+			console.log(e)
+		}
 	}
 	
 

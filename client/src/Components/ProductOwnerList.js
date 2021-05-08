@@ -14,17 +14,17 @@ class ProductOwnerList extends Component {
 
 	handleSubmit = async (e) => {
 		e.preventDefault()
-    const owners = await this.props.searchProduct(this.state.productId)
-    console.log(owners)
-    this.setState({ owners })
+		const owners = await this.props.searchProduct(this.state.productId)
+		console.log(owners)
+		this.setState({ owners })
 	}
 
-  renderOwnerList = () => {
-    const { owners } = this.state
-    return owners.map((owner, i) => {
-      return <li key={i}>{owner}</li>
-    })
-  }
+	renderOwnerList = () => {
+		const { owners } = this.state
+		return owners.map((owner, i) => {
+			return <li key={i}>{owner}</li>
+		})
+	}
 
 
 	render() {
@@ -44,9 +44,9 @@ class ProductOwnerList extends Component {
 							<button type="submit" className="btn btn-primary btn-block">Search</button>
 						</form>
 
-            <div>
-              <ul> {this.renderOwnerList()} </ul>
-            </div>
+						<div>
+							<ul> {this.renderOwnerList()} </ul>
+						</div>
 					</div>
 				</div>
 			</div>

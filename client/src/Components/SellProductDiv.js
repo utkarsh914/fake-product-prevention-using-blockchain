@@ -16,15 +16,15 @@ class SellProductDiv extends Component {
 
 	handleSubmit = async (e) => {
 		e.preventDefault()
-    const { productId, customer } = this.state
-    try {
-      await this.props.sellProduct(productId, customer)
-      window.alert(`Product sold to\n${customer}`)
-    }
-    catch (e) {
-      console.log(e)
-      window.alert("Error occured")
-    }
+		const { productId, customer } = this.state
+		try {
+			await this.props.sellProduct(productId, customer)
+			window.alert(`Product sold to\n${customer}`)
+		}
+		catch (e) {
+			console.log(e)
+			window.alert("Error occured")
+		}
 	}
 
 
@@ -42,7 +42,7 @@ class SellProductDiv extends Component {
 									value={this.state.productId} onChange={this.handleChange}
 								/>
 							</div>
-              <div className="form-group">
+							<div className="form-group">
 								<input type="text" className="form-control" placeholder="Enter customer's address"
 									name="customer"
 									value={this.state.customer} onChange={this.handleChange}

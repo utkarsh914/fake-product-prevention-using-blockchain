@@ -4,6 +4,8 @@ import "./Stylesheets/App.css";
 import MyApp from "./contracts/MyApp.json";
 import OwnerDiv from "./Components/OwnerDiv";
 import ManufacturerDiv from "./Components/ManufacturerDiv";
+import ProductOwnerList from "./Components/ProductOwnerList";
+import SellProductDiv from "./Components/SellProductDiv";
 
 class App extends Component {
 	
@@ -73,6 +75,19 @@ class App extends Component {
 	}
 
 
+	searchProduct = async (productId) => {
+		const { account, contract } = this.state
+		return contract.methods.getOwners(productId).call({ from: account })
+	}
+
+
+	sellProduct = async (productId, customer) => {
+		const { account, contract } = this.state
+		return contract.methods.updateOwnership(productId, customer)
+			.send({ from: account })
+	}
+
+
 
 	render() {
 		if (!this.state.web3) {
@@ -81,8 +96,12 @@ class App extends Component {
 
 		return (
 			<div className="container pt-5">
+
 				<h1 className="text-center">AuthentiFi Ethereum</h1>
-				<div className="row mt-4">
+
+				<h6 className="text-center"><i>{this.state.account}</i></h6>
+
+				<div className="row mt-5">
 					<div className="col-md-6">
 						<OwnerDiv
 							createManufacturer = {this.createManufacturer}
@@ -91,6 +110,16 @@ class App extends Component {
 					<div className="col-md-6">
 						<ManufacturerDiv
 							createProduct = {this.createProduct}
+						/>
+					</div>
+					<div className="col-md-6">
+						<ProductOwnerList
+							searchProduct = {this.searchProduct}
+						/>
+					</div>
+					<div className="col-md-6">
+						<SellProductDiv
+							sellProduct = {this.sellProduct}
 						/>
 					</div>
 				</div>

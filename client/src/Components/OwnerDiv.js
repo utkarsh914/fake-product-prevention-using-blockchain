@@ -24,7 +24,7 @@ class OwnerDiv extends Component {
 			<div id="content" className="mt-3">
 				<div className="card mb-4" >
 					<div className="card-body">
-						<h5 className="text-center">Add a manufacturer</h5>
+						<h5 className="text-center"><i>Add a manufacturer</i></h5>
 						<form className="my-3" onSubmit={this.handleCreateManufacturer}>
 							
 							<div className="form-group">

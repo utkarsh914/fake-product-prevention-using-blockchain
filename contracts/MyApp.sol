@@ -1,4 +1,6 @@
-pragma solidity ^0.5.0;
+// pragma solidity >=0.8.0 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.0 <0.9.0;
 
 contract MyApp {
 
@@ -28,6 +30,7 @@ contract MyApp {
 		string model;
 		address manufacturer;
 		address curOwner;
+		address[] owners;
 	}
 
 	// struct Customer {
@@ -39,8 +42,7 @@ contract MyApp {
 
 	// mapping(address => Customer) public customers;
 	mapping(address => Manufacturer) public manufacturers;
-	mapping(uint => Product) public products;
-	mapping(uint => address[]) public owners;
+	mapping(uint => Product) products;
 
 
 	// events to be emitted when certain operatons are completed
@@ -53,7 +55,7 @@ contract MyApp {
 		Constructor is called when this contract is deployed on the network.
 		It sets the owner of the contract as the address which deploys it.
 	*/
-	constructor() public {
+	constructor() {
 		owner = msg.sender;
 	}
 
@@ -87,9 +89,8 @@ contract MyApp {
 		p.model = _model;
 		p.manufacturer = msg.sender;
 		p.curOwner = msg.sender;
-
 		// push cur owner(manufacturer) to owners array
-		owners[productId].push(msg.sender);
+		p.owners.push(msg.sender);
 
 		productId++;
 		emit ProductCreated(productId-1, msg.sender);
@@ -97,12 +98,12 @@ contract MyApp {
 
 
 	/*
-		Returns a list of all the owners of a product
-		- list[0] is the first owner (manufacturer)
-		- last address in the list is the current owner
+		Returns a tuple of a product struct
+		- p.owners[0] is the first owner (manufacturer)
+		- last address in the owners list is the current owner
 	*/
-	function getOwners(uint _id) public view returns(address[] memory) {
-		return owners[_id];
+	function getProduct(uint _id) public view returns(Product memory) {
+		return products[_id];
 	}
 
 
@@ -116,7 +117,7 @@ contract MyApp {
 		require(p.curOwner == msg.sender, "Not authorized");
 		
 		p.curOwner = _newOwner;
-		owners[_id].push(_newOwner);
+		p.owners.push(_newOwner);
 
 		emit OwnershipUpdated(_id, _newOwner);
 	}

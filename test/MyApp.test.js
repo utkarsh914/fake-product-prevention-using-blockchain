@@ -40,14 +40,12 @@ contract('MyApp', (accounts) => {
 	})
 
 
-
 	it('Manufacturer creates a new product (#0)', async () => {
 		// create a product
 		await app.createProduct("Prod #0", "Model #0", {from: manufacturer});
 
 		// fetch the products, and its owners
-		let p = await app.products(0)
-		let owners = await app.getOwners(0)
+		const p = await app.getProduct(0)
 
 		// verify if the fetched product is same as the created one
 		assert.equal(p.exists, true);
@@ -56,32 +54,30 @@ contract('MyApp', (accounts) => {
 		assert.equal(p.manufacturer.toLowerCase(), manufacturer.toLowerCase());
 		assert.equal(p.curOwner.toLowerCase(), manufacturer.toLowerCase());
 		// verify product owners
-		assert.equal(owners[0].toLowerCase(), manufacturer.toLowerCase());
+		assert.equal(p.owners[0].toLowerCase(), manufacturer.toLowerCase());
 	})
 
 
 	it('Manufacturer sells Product #0 to customer', async () => {
 		// apply update
 		await app.updateOwnership(0, customer, { from: manufacturer });
-		const p0 = await app.products(0); // fetch updated prod #0
-		const owners = await app.getOwners(0) // fetch updated owners list of prod #0
+		const p0 = await app.getProduct(0); // fetch updated prod #0
 		
 		assert.equal(p0.curOwner.toLowerCase(), customer.toLowerCase());
-		assert.equal(owners[0].toLowerCase(), manufacturer.toLowerCase());
-		assert.equal(owners[1].toLowerCase(), customer.toLowerCase());
+		assert.equal(p0.owners[0].toLowerCase(), manufacturer.toLowerCase());
+		assert.equal(p0.owners[1].toLowerCase(), customer.toLowerCase());
 	})
 
 
 	it('Customer #0 sells Product #0 to customer #1', async () => {
 		// apply update
 		await app.updateOwnership(0, customer2, { from: customer });
-		const p0 = await app.products(0); // fetch updated prod #0
-		const owners = await app.getOwners(0) // fetch updated owners list of prod #0
+		const p0 = await app.getProduct(0); // fetch updated prod #0
 		
 		assert.equal(p0.curOwner.toLowerCase(), customer2.toLowerCase());
-		assert.equal(owners[0].toLowerCase(), manufacturer.toLowerCase());
-		assert.equal(owners[1].toLowerCase(), customer.toLowerCase());
-		assert.equal(owners[2].toLowerCase(), customer2.toLowerCase());
+		assert.equal(p0.owners[0].toLowerCase(), manufacturer.toLowerCase());
+		assert.equal(p0.owners[1].toLowerCase(), customer.toLowerCase());
+		assert.equal(p0.owners[2].toLowerCase(), customer2.toLowerCase());
 	})
 
 })

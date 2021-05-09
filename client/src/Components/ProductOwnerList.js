@@ -17,9 +17,8 @@ class ProductOwnerList extends Component {
 		const { account, contract } = this.props
 		const { productId } = this.state
 		try {
-			const owners = await contract.methods.getOwners(productId).call({ from: account })
-			console.log(owners)
-			this.setState({ owners })
+			const p = await contract.methods.getProduct(productId).call({ from: account })
+			this.setState({ owners: p.owners })
 		}
 		catch (e) {
 			console.log(e)

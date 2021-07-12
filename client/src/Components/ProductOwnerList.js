@@ -1,10 +1,48 @@
 import React, { Component } from 'react'
 
+
+class RenderProductOwnerInfo extends Component {
+
+	constructor(props) {
+		super(props)
+	}
+
+	renderOwnerList = (owners) => {
+		return owners.map((owner, i) => {
+			return <li key={i}>{owner}</li>
+		})
+	}
+
+
+	render() {
+		const { product } = this.props
+		if (!product || !product.exists) {
+			return <div>Invalid Product ID</div>
+		}
+		return (
+			<div className="mt-2">
+				<h5 className="text-center- mb-3"><i>Product specifications:</i></h5>
+				<p> <b>Product ID:</b> { product.id } </p>
+				<p> <b>Name:</b> { product.name } </p>
+				<p> <b>Model:</b> { product.model } </p>
+				<p> <b>Manufacturer:</b> { product.manufacturer } </p>
+				<p> <b>Current Owner:</b> { product.curOwner } </p>
+				<p>
+					<b>Owner List from start till current:</b>
+					<ol> {this.renderOwnerList(product.owners)} </ol>
+				</p>
+			</div>
+		);
+	}
+}
+
+
+
 class ProductOwnerList extends Component {
 
 	constructor(props) {
 		super(props)
-		this.state = { productId: '', exists: true, owners:[] }
+		this.state = { productId: '', product: null, searched: false }
 	}
 
 	handleChange = (e) => {
@@ -17,9 +55,9 @@ class ProductOwnerList extends Component {
 		const { account, contract } = this.props
 		const { productId } = this.state
 		try {
-			const p = await contract.methods.getProduct(productId).call({ from: account })
-			console.log(p)
-			this.setState({ exists: p.exists, owners: p.owners })
+			const product = await contract.methods.getProduct(productId).call({ from: account })
+			console.log(product)
+			this.setState({ product : product, searched : true })
 		}
 		catch (e) {
 			console.log(e)
@@ -27,20 +65,9 @@ class ProductOwnerList extends Component {
 		}
 	}
 
-	renderOwnerList = () => {
-		const { owners } = this.state
-
-		// if (owners.length === 0) {
-		// 	return <p>Invalid product ID</p>
-		// }
-
-		return owners.map((owner, i) => {
-			return <li key={i}>{owner}</li>
-		})
-	}
-
 
 	render() {
+		const { product, productId, searched } = this.state
 		return (
 			<div id="content" className="mt-4">
 
@@ -50,15 +77,14 @@ class ProductOwnerList extends Component {
 					<div className="form-group">
 						<input type="text" className="form-control" placeholder="Enter product ID"
 							name="productId"
-							value={this.state.productId} onChange={this.handleChange}
+							value={productId} onChange={this.handleChange}
 						/>
 					</div>
 					<button type="submit" className="btn btn-primary btn-block">Search</button>
 				</form>
 
-				<div>
-					<ul> {this.renderOwnerList()} </ul>
-				</div>
+				{/* only display product info if search has been performed at least once */}
+				{ searched && <RenderProductOwnerInfo product = {product} /> }
 
 			</div>
 		);

@@ -20,7 +20,7 @@ class NavBar extends Component {
       <React.Fragment>
 
         <div className="container py-4">
-          <h1 className="text-center">AuthentiFi Ethereum</h1>
+          <h1 className="text-center"><i>AuthentiFi</i></h1>
           <h6 className="text-center"><i>{this.props.account}</i></h6>
         </div>
 

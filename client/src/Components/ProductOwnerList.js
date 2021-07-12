@@ -16,9 +16,11 @@ class RenderProductOwnerInfo extends Component {
 
 	render() {
 		const { product } = this.props
+
 		if (!product || !product.exists) {
 			return <div>Invalid Product ID</div>
 		}
+		
 		return (
 			<div className="mt-2">
 				<h5 className="text-center- mb-3"><i>Product specifications:</i></h5>

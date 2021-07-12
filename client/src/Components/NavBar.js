@@ -21,7 +21,7 @@ class NavBar extends Component {
 
         <div className="container py-4">
           <h1 className="text-center"><i>AuthentiFi</i></h1>
-          <h6 className="text-center"><i>{this.props.account}</i></h6>
+          <h6 className="text-center"><i>MY ADDRESS: {this.props.account}</i></h6>
         </div>
 
         <nav className="navbar navbar-expand-sm navbar-light bg-light">

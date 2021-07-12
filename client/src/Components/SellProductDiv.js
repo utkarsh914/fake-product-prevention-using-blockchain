@@ -31,29 +31,26 @@ class SellProductDiv extends Component {
 
 	render() {
 		return (
-			<div id="content" className="mt-3">
-				<div className="card mb-4" >
-					<div className="card-body">
-						<h5 className="text-center"><i>Sell a product</i></h5>
+			<div id="content" className="mt-4">
 
-						<form className="my-3" onSubmit={this.handleSubmit}>
-							<div className="form-group">
-								<input type="text" className="form-control" placeholder="Enter product ID"
-									name="productId"
-									value={this.state.productId} onChange={this.handleChange}
-								/>
-							</div>
-							<div className="form-group">
-								<input type="text" className="form-control" placeholder="Enter customer's address"
-									name="customer"
-									value={this.state.customer} onChange={this.handleChange}
-								/>
-							</div>
-							<button type="submit" className="btn btn-primary btn-block">Sell</button>
-						</form>
+				<h5 className="text-center"><i>Sell a product</i></h5>
 
+				<form className="my-3" onSubmit={this.handleSubmit}>
+					<div className="form-group">
+						<input type="text" className="form-control" placeholder="Enter product ID"
+							name="productId"
+							value={this.state.productId} onChange={this.handleChange}
+						/>
 					</div>
-				</div>
+					<div className="form-group">
+						<input type="text" className="form-control" placeholder="Enter customer's address"
+							name="customer"
+							value={this.state.customer} onChange={this.handleChange}
+						/>
+					</div>
+					<button type="submit" className="btn btn-primary btn-block">Sell</button>
+				</form>
+
 			</div>
 		);
 	}

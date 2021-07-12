@@ -1,11 +1,14 @@
 import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
 import getWeb3 from "./Utils/getWeb3";
 import "./Stylesheets/App.css";
 import MyApp from "./contracts/MyApp.json";
+import NavBar from "./Components/NavBar";
 import OwnerDiv from "./Components/OwnerDiv";
 import ManufacturerDiv from "./Components/ManufacturerDiv";
 import ProductOwnerList from "./Components/ProductOwnerList";
 import SellProductDiv from "./Components/SellProductDiv";
+import GenerateQRDiv from "./Components/GenerateQRDiv"
 
 class App extends Component {
 	
@@ -46,39 +49,42 @@ class App extends Component {
 		const { account, contract } = this.state
 
 		return (
-			<div className="container pt-5">
+			<React.Fragment>
+				<NavBar account = {account} />
+				
+				<div className="container pt-5-">
+					<div className="row justify-content-center">
+						<div className="col-md-8">
 
-				<h1 className="text-center">AuthentiFi Ethereum</h1>
-				<h6 className="text-center"><i>{account}</i></h6>
+							<Switch>
 
-				<div className="row mt-5">
-					<div className="col-md-6">
-						<OwnerDiv
-							account = {account}
-							contract = {contract}
-						/>
-					</div>
-					<div className="col-md-6">
-						<ManufacturerDiv
-							account = {account}
-							contract = {contract}
-						/>
-					</div>
-					<div className="col-md-6">
-						<ProductOwnerList
-							account = {account}
-							contract = {contract}
-						/>
-					</div>
-					<div className="col-md-6">
-						<SellProductDiv
-							account = {account}
-							contract = {contract}
-						/>
+								<Route path = "/admin"
+									render = {(props) => <OwnerDiv account = {account} contract = {contract} />}
+								/>
+
+								<Route path = "/manufacturer"
+									render = {(props) => <ManufacturerDiv account = {account} contract = {contract} />}
+								/>
+
+								<Route path = "/sell"
+									render = {(props) => <SellProductDiv account = {account} contract = {contract} />}
+								/>
+
+								<Route path = "/qr"
+									render = {(props) => <GenerateQRDiv/>}
+								/>
+
+								<Route path = "/"
+									render = {(props) => <ProductOwnerList account = {account} contract = {contract} />}
+								/>
+							
+							</Switch>
+
+						</div>
 					</div>
 				</div>
-				
-			</div>
+
+			</React.Fragment>
 		);
 	}
 }

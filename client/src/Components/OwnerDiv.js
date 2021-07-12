@@ -29,30 +29,29 @@ class OwnerDiv extends Component {
 
 	render() {
 		return (
-			<div id="content" className="mt-3">
-				<div className="card mb-4" >
-					<div className="card-body">
-						<h5 className="text-center"><i>Add a manufacturer</i></h5>
-						<form className="my-3" onSubmit={this.handleCreateManufacturer}>
-							
-							<div className="form-group">
-								<input type="text" className="form-control" placeholder="Enter name"
-									name="name"
-									value={this.state.name} onChange={this.handleChange}
-								/>
-							</div>
+			<div id="content" className="mt-4">
 
-							<div className="form-group">
-								<input type="text" className="form-control" placeholder="Enter address"
-									name="address"
-									value={this.state.address} onChange={this.handleChange}
-								/>
-							</div>
-
-							<button type="submit" className="btn btn-primary btn-block">Add</button>
-						</form>
+				<h5 className="text-center"><i>Add a manufacturer</i></h5>
+				
+				<form className="my-3" onSubmit={this.handleCreateManufacturer}>
+					
+					<div className="form-group">
+						<input type="text" className="form-control" placeholder="Enter name"
+							name="name"
+							value={this.state.name} onChange={this.handleChange}
+						/>
 					</div>
-				</div>
+
+					<div className="form-group">
+						<input type="text" className="form-control" placeholder="Enter address"
+							name="address"
+							value={this.state.address} onChange={this.handleChange}
+						/>
+					</div>
+
+					<button type="submit" className="btn btn-primary btn-block">Add</button>
+				</form>
+
 			</div>
 		);
 	}

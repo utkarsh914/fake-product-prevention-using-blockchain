@@ -4,7 +4,7 @@ class ProductOwnerList extends Component {
 
 	constructor(props) {
 		super(props)
-		this.state = { productId: '', owners:[] }
+		this.state = { productId: '', exists: true, owners:[] }
 	}
 
 	handleChange = (e) => {
@@ -18,7 +18,8 @@ class ProductOwnerList extends Component {
 		const { productId } = this.state
 		try {
 			const p = await contract.methods.getProduct(productId).call({ from: account })
-			this.setState({ owners: p.owners })
+			console.log(p)
+			this.setState({ exists: p.exists, owners: p.owners })
 		}
 		catch (e) {
 			console.log(e)
@@ -28,6 +29,11 @@ class ProductOwnerList extends Component {
 
 	renderOwnerList = () => {
 		const { owners } = this.state
+
+		// if (owners.length === 0) {
+		// 	return <p>Invalid product ID</p>
+		// }
+
 		return owners.map((owner, i) => {
 			return <li key={i}>{owner}</li>
 		})
@@ -36,26 +42,24 @@ class ProductOwnerList extends Component {
 
 	render() {
 		return (
-			<div id="content" className="mt-3">
-				<div className="card mb-4" >
-					<div className="card-body">
-						<h5 className="text-center"><i>Search a product</i></h5>
+			<div id="content" className="mt-4">
 
-						<form className="my-3" onSubmit={this.handleSubmit}>
-							<div className="form-group">
-								<input type="text" className="form-control" placeholder="Enter product ID"
-									name="productId"
-									value={this.state.productId} onChange={this.handleChange}
-								/>
-							</div>
-							<button type="submit" className="btn btn-primary btn-block">Search</button>
-						</form>
+				<h5 className="text-center"><i>Search a product</i></h5>
 
-						<div>
-							<ul> {this.renderOwnerList()} </ul>
-						</div>
+				<form className="my-3" onSubmit={this.handleSubmit}>
+					<div className="form-group">
+						<input type="text" className="form-control" placeholder="Enter product ID"
+							name="productId"
+							value={this.state.productId} onChange={this.handleChange}
+						/>
 					</div>
+					<button type="submit" className="btn btn-primary btn-block">Search</button>
+				</form>
+
+				<div>
+					<ul> {this.renderOwnerList()} </ul>
 				</div>
+
 			</div>
 		);
 	}

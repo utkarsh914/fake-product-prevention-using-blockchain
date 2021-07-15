@@ -6,7 +6,7 @@ contract MyApp {
 
 	/*
 		holds the address of the owner of the contract
-		owner -> the address which deploys this smart contract on the nwtwork.
+		owner -> the address which deploys this smart contract on the network.
 	*/
 	address public owner;
 	/*
@@ -41,6 +41,7 @@ contract MyApp {
 
 
 	// mapping(address => Customer) public customers;
+	// mappings to store manufacturers and products informations
 	mapping(address => Manufacturer) public manufacturers;
 	mapping(uint => Product) products;
 
